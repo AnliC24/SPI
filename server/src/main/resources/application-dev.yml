@@ -22,11 +22,11 @@ spring:
         username: root
         password: ENC(mISU4LC0jGV5N1Uljn4RlA==)
         driver-class-name: com.mysql.cj.jdbc.Driver
-#      phoenix:
-#        jdbc-url: jdbc:phoenix:127.0.0.1:2181
-#        username:
-#        password:
-#        driver-class-name: org.apache.phoenix.jdbc.PhoenixDriver
+      phoenix:
+        jdbc-url: jdbc:phoenix:127.0.0.1:2181
+        username:
+        password:
+        driver-class-name: org.apache.phoenix.jdbc.PhoenixDriver
       # spring-boot 2.X 默认采用高性能的 Hikari 作为连接池
       type: com.zaxxer.hikari.HikariDataSource
       hikari:
@@ -72,14 +72,17 @@ logging:
     name: sjtc.log
 groovyResource: /groovyScript
 
-#hitqz:
-#  device:
-#    hkcamera:
-#      hc-net-sdk-path: G:\hgdN-sjtc\device\hk-camera-device\src\main\resources\faceLibs\HCNetSDK.dll
-#      n-log-level: 3
-#      b-auto-del: false
-#      sdk-log-path: .\SDKLog\
-#      save-photo-path: H:\
+hitqz:
+  device:
+    hkcamera:
+      hc-net-sdk-path: G:\hgdN-sjtc\device\hk-camera-device\src\main\resources\faceLibs\HCNetSDK.dll
+      ## E:\\DEMO_TEST\\JAVA_Demo\\JNA_TEST\\lib\\HCNetSDK.dll
+      ##G:\hgdN-sjtc\device\hk-camera-device\src\main\resources\faceLibs\HCNetSDK.dll
+      ##G:\dll\faceLibs\HCNetSDK.dll
+      n-log-level: 3
+      b-auto-del: false
+      sdk-log-path: .\SDKLog\
+      save-photo-path: H:\
 
 
 

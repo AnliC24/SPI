@@ -17,6 +17,7 @@
     <modules>
         <module>dict-spring-boot-starter</module>
         <module>device-spring-boot-starter</module>
+        <module>visual-spring-boot-starter</module>
     </modules>
 
     <properties>

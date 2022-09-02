@@ -101,11 +101,18 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.apache.phoenix</groupId>-->
-<!--            <artifactId>phoenix-client-hbase-2.2</artifactId>-->
-<!--            <version>5.1.2</version>-->
-<!--        </dependency>-->
+        <!--视觉调用服务 -->
+        <dependency>
+            <groupId>com.hitqz.sjtc</groupId>
+            <artifactId>visual-spring-boot-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.phoenix</groupId>
+            <artifactId>phoenix-client-hbase-2.2</artifactId>
+            <version>5.1.2</version>
+        </dependency>
 
         <!--2022-07-27 做操作日志切面处理 -->
         <dependency>
@@ -126,7 +133,6 @@
             <artifactId>ujmp-gui</artifactId>
             <version>0.3.0</version>
         </dependency>
-
 
     </dependencies>
 

@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,14 +18,19 @@ public class BenchmarkInfo implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
+    @ApiModelProperty(value = "聚合基准")
     private String benchmark;
 
+    @ApiModelProperty("对象结果映射主键")
     private String traceUuid;
 
+    @ApiModelProperty("对象结果映射批次号")
     private String trace;
 
+    @ApiModelProperty("是否标准")
     private String isStd;
 
+    @ApiModelProperty("作业缺失数")
     private double lostCount;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

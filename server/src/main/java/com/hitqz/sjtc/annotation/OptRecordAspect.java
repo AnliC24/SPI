@@ -1,13 +1,10 @@
 package com.hitqz.sjtc.annotation;
 
-import cn.hutool.extra.servlet.ServletUtil;
-import com.hitqz.sjtc.core.dict.UserDataDict;
 import com.hitqz.sjtc.core.model.ResultObj;
 import com.hitqz.sjtc.core.util.MyBeanUtils;
 import com.hitqz.sjtc.entity.OptRecordInfo;
-import com.hitqz.sjtc.entity.SysUser;
 import com.hitqz.sjtc.service.OptRecordInfoService;
-import com.hitqz.sjtc.util.ShiroUtils;
+import com.hitqz.sjtc.util.OptRecordUtil;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,11 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Optional;
 
 /**
  * @author windc
@@ -47,16 +40,7 @@ public class OptRecordAspect {
     @Pointcut("execution(* com.hitqz.sjtc.controller..*.*(..))")
     public void optExceptionLogPointCut() {
     }
-    /**
-     * 记录非法用户
-     * */
-    private SysUser illegalUser(){
-        SysUser illegalUser = new SysUser();
-        illegalUser.setUserId("110");
-        illegalUser.setRoleType(UserDataDict.illegalAdmin.getDictCode());
-        illegalUser.setUserName(UserDataDict.illegalAdmin.getDictValue());
-        return illegalUser;
-    }
+
 
     /**
      * afterReturning 是在调用完接口后,在进行日志记录
@@ -70,7 +54,7 @@ public class OptRecordAspect {
 
         log.info("开始处理请求日志");
 
-        OptRecordInfo optRecordInfo = createOptRecordInfo();
+        OptRecordInfo optRecordInfo = OptRecordUtil.createOptRecordInfo();
 
         ResultObj res = MyBeanUtils.getBeanByCopyProperties(obj,new ResultObj());
 
@@ -93,7 +77,7 @@ public class OptRecordAspect {
     public void saveExceptionLog(Throwable e){
         log.info("开始处理接口异常抛出的操作记录");
 
-        OptRecordInfo optRecordInfo = createOptRecordInfo();
+        OptRecordInfo optRecordInfo = OptRecordUtil.createOptRecordInfo();
 
         //异常结果
         String exceptionMessage = stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace());
@@ -116,35 +100,6 @@ public class OptRecordAspect {
              buff.append(stet).append("\n");
          }
         return exceptionName + ":" + exceptionMessage + "\n\t" + buff.toString();
-    }
-
-    /**
-     *  获取当前请求的HttpRequest
-     * */
-    private OptRecordInfo createOptRecordInfo(){
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = (HttpServletRequest) (requestAttributes != null ? requestAttributes
-                .resolveReference(RequestAttributes.REFERENCE_REQUEST) : null);
-
-        SysUser sysUser = ShiroUtils.getUserEntity();
-        if(!Optional.ofNullable(sysUser).isPresent()){
-            sysUser = illegalUser();
-        }
-        String userId = sysUser.getUserId();
-        String userName = sysUser.getUserName();
-        String roleType = sysUser.getRoleType();
-
-        //获取用户的真实请求ip
-        String url = request == null?"error url":request.getRequestURI();
-
-        OptRecordInfo optRecordInfo = new OptRecordInfo();
-        optRecordInfo.setOptIp(request == null?"error ip":ServletUtil.getClientIP(request));
-        optRecordInfo.setUserId(userId);
-        optRecordInfo.setUserName(userName);
-        optRecordInfo.setRoleType(roleType);
-        optRecordInfo.setOptUrl(url);
-
-        return optRecordInfo;
     }
 
 }
