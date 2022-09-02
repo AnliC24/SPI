@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.UserRelateMapMapper">
+
+    <insert id="addUserRelateMap">
+        INSERT INTO `user_relate_map` ( `user_id`, `user_name`, `super_relate_id`, `super_relate_name` )
+        VALUES
+            ( #{userId}, #{userName}, #{superRelateId}, #{superRelateName} );
+    </insert>
+</mapper>

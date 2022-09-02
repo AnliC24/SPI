@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.device.mapper.HkCameraDeviceInfoMapper">
+
+    <select id="getHkCameraDeviceInfo" parameterType="string" resultType="com.hitqz.device.entity.HkCameraDeviceInfo">
+        SELECT
+            device_id,
+            device_name,
+            ip_address ,
+            port,
+            user_name,
+            password,
+            create_time,
+            modify_time
+        FROM
+            hk_camera_info
+        where device_id = #{deviceId}
+    </select>
+
+    <insert id="addHkCameraDeviceInfo">
+        INSERT INTO `hk_camera_info` (
+                                      `device_id`,
+                                      `device_name`,
+                                      `ip_address`,
+                                      `port`,
+                                      `user_name`,
+                                      `password`,
+                                      `create_time`,
+                                      `modify_time` )
+        VALUES
+        ( #{deviceId}, #{deviceName}, #{ipAddress}, #{port}, #{userName}, #{password}, #{createTime}, #{modifyTime} )
+    </insert>
+
+    <delete id="deleteHkCameraDevice">
+        DELETE
+        FROM
+            hk_camera_info
+        WHERE
+            device_id = #{deviceId}
+    </delete>
+
+    <update id="editDeviceInfo">
+        UPDATE
+        hk_camera_info
+        SET
+        <if test="deviceName != null"> device_name = #{deviceName}</if>
+        <if test="deviceName == null"> device_name = device_name</if>,
+
+        <if test="ipAddress != null"> ip_address = #{ipAddress}</if>
+        <if test="ipAddress == null"> ip_address = ip_address</if>,
+
+        <if test="port != null"> port= #{port}</if>
+        <if test="port == null"> port = port</if>,
+
+        <if test="userName != null"> user_name = #{userName}</if>
+        <if test="userName == null"> user_name = user_name</if>,
+
+        <if test="password != null"> password= #{password}</if>
+        <if test="password == null"> password = password</if>
+
+        WHERE
+        device_id = #{deviceId}
+    </update>
+</mapper>

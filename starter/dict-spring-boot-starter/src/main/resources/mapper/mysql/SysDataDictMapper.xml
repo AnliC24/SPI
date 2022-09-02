@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.dict.starter.mapper.SysDataDictMapper">
+        <select id="selectDictPage" resultType="com.hitqz.sjtc.core.dict.SysDataDict">
+                SELECT
+                        id,
+                        dict_code,
+                        dict_value,
+                        dict_type,
+                        dict_desc,
+                        dict_level
+                FROM
+                        sys_data_dict
+                WHERE
+                        1 = 1
+                <if test="param.dictType != null and param.dictType != '' ">
+                        and dict_type = #{param.dictType}
+                </if>
+        </select>
+
+        <insert id="addSysDataDict">
+                INSERT INTO `sys_data_dict`
+                    ( `dict_code`, `dict_value`, `dict_type`, `dict_desc`, `dict_level` )
+                VALUES
+                (
+                 #{param.dictCode},
+                 #{param.dictValue},
+                 #{param.dictType},
+                 #{param.dictDesc},
+                 #{param.dictLevel}
+                )
+        </insert>
+
+    <update id="updateSysDataDict">
+        UPDATE `sys_data_dict`
+        SET
+            `dict_code` = #{param.dictCode},
+            `dict_value` = #{param.dictValue},
+            `dict_type` = #{param.dictType},
+            `dict_desc` = #{param.dictDesc}
+        WHERE
+            `id` = #{param.id}
+    </update>
+
+    <select id="getDataDictById" resultType="com.hitqz.sjtc.core.dict.SysDataDict">
+        SELECT
+            id,
+            dict_code,
+            dict_value,
+            dict_type,
+            dict_desc,
+            dict_level
+        FROM
+            sys_data_dict
+        WHERE
+            id = #{id}
+    </select>
+
+    <delete id="deleteDataDict">
+        DELETE
+        FROM
+            sys_data_dict
+        WHERE
+            id = #{id}
+          AND dict_level = 'CUST'
+    </delete>
+</mapper>

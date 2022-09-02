@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.DeviceGroupMapMapper">
+
+    <delete id="unBindDeviceGroup">
+        delete from device_group_map where device_id = #{deviceId}
+    </delete>
+
+    <select id="isBindDeviceGroup" resultType="String">
+        select device_group_id from device_group_map where device_id = #{deviceId} GROUP BY device_group_id
+    </select>
+
+    <delete id="batchUnBindDevice">
+        delete from device_group_map where device_group_id = #{deviceGroupId}
+    </delete>
+
+    <select id="isBindDevice" resultType="String">
+        select device_id from device_group_map where device_group_id = #{deviceGroupId}
+    </select>
+
+    <insert id="saveBatch">
+        INSERT INTO `device_group_map` ( `device_id`, `device_group_id` )
+        VALUES
+           <foreach collection="deviceGroupMaps" item="map" separator="," >
+               (
+                #{map.deviceId},#{map.deviceGroupId}
+               )
+           </foreach>
+    </insert>
+
+    <select id="getDeviceIdByGroupAddress" resultType="com.hitqz.sjtc.entity.BaseDeviceInfo">
+        SELECT
+            device_id,
+            device_type
+        FROM
+            base_device_info
+        WHERE
+                device_id IN (
+                SELECT
+                    map.device_id
+                FROM
+                    device_group_info groupInfo
+                        LEFT JOIN device_group_map map ON groupInfo.device_group_id = map.device_group_id
+                WHERE
+                    groupInfo.group_address = #{groupAddress}
+                  AND map.device_id IS NOT NULL
+            )
+    </select>
+
+</mapper>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hitqz.sjtc.entity.SysUser">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="user_status" property="userStatus"/>
+        <result column="user_email" property="userEmail"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user_id" property="modifyUserId"/>
+        <result column="role_type" property="roleType"/>
+        <result column="superior_user_id" property="superiorUserId"/>
+    </resultMap>
+
+    <select id="findByUserName" resultMap="BaseResultMap">
+        select * from user_info where user_name= #{userName} limit 1
+    </select>
+
+
+    <select id="getSuperiorUserIdByUserId" resultType="String">
+        select superior_user_id from user_info where user_id = #{userId}
+    </select>
+
+
+    <select id="selectUserPage"  resultType="com.hitqz.sjtc.dto.user.SysUserDto">
+        SELECT
+            id,
+            user_id,
+            user_name,
+            user_password,
+            user_status,
+            role_type,
+            user_email,
+            user_phone,
+            create_time,
+            modify_time
+        FROM
+            user_info DATA
+        ORDER BY
+            create_time DESC
+    </select>
+
+    <select id="getSysUserById" resultType="com.hitqz.sjtc.dto.user.SysUserDto">
+        SELECT
+            info.*,
+            map.super_relate_id as superiorUserId ,
+            map.super_relate_name as superiorUserName
+        FROM
+            user_info info
+                LEFT JOIN user_relate_map map ON info.user_id = map.user_id
+        WHERE
+            info.id = 8
+    </select>
+    
+    <select id="getUserPhonesByUserIds" resultType="com.hitqz.sjtc.dto.user.UserPhoneByUserIds">
+        SELECT
+            user_id,
+            user_phone,
+            role_type,
+            user_name
+        FROM
+            user_info
+        WHERE
+            role_type = #{roleType} and user_id IN
+            <foreach collection="userIds" open="(" close=")" separator="," item="userId">
+                 #{userId}
+            </foreach>
+    </select>
+
+    <select id="getUserInfoByUserId" resultType="com.hitqz.sjtc.entity.SysUser">
+        SELECT
+            user_id,
+            user_name,
+            role_type
+        FROM
+            user_info
+        WHERE
+            user_id IN
+        <foreach collection="userIds" open="(" close=")" separator="," item="userId">
+            #{userId}
+        </foreach>
+
+    </select>
+
+    <select id="getUserNameByUserId" resultType="String">
+        SELECT
+            user_name
+        FROM
+            user_info
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
+    <insert id="addUser">
+        INSERT INTO `user_info`
+            ( `user_id`, `user_name`, `user_password`, `user_status`, `role_type`, `user_email`, `user_phone` ,`create_time`, `modify_time` )
+        VALUES
+        ( #{userId}, #{userName}, #{userPassword}, #{userStatus}, #{roleType}, #{userEmail}, #{userPhone},#{createTime},#{modifyTime} );
+    </insert>
+
+    <update id="updateUser">
+        UPDATE `user_info`
+        SET `user_password` = #{userPassword},
+            `user_email` = #{userEmail},
+            `user_phone` = #{userPhone},
+            `modify_time` = #{modifyTime}
+        WHERE
+            `id` = #{id};
+    </update>
+
+    <select id="getRoleTypeByIds" resultType="String">
+        select role_type from user_info where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateUserStatus">
+        UPDATE `user_info`
+        SET
+            `user_status` = #{userStatus},
+            `modify_time` = #{modifyTime}
+        WHERE
+            `id` in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

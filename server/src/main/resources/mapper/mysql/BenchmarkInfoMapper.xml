@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.BenchmarkInfoMapper">
+
+    <select id="selectBenchmarkPage" resultType="com.hitqz.sjtc.dto.benchmark.BenchmarkInfoDto">
+        SELECT
+            info.id,
+            benchmark as batch_operation_id,
+            trace,
+            is_std,
+            dict.dict_value as is_std_cn,
+            lost_count,
+            create_time
+        FROM
+            benchmark_info info
+                left join sys_data_dict dict on info.is_std = dict.dict_code and dict.dict_type = 'std_matrix'
+        ORDER BY create_time desc
+    </select>
+</mapper>

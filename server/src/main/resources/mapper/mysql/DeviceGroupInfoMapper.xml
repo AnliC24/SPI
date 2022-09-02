@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.DeviceGroupInfoMapper">
+
+    <select id="selectDeviceGroupPage" parameterType="com.hitqz.sjtc.dto.deviceGroup.DeviceGroupPageCondition"
+            resultType="com.hitqz.sjtc.dto.deviceGroup.DeviceGroupInfoDetail">
+        SELECT
+            info.id,
+            info.device_group_id,
+            info.device_group_name,
+            info.device_group_desc,
+            count( map.device_id ) AS bind_device_count,
+            info.group_address,
+            dict.dict_value as group_address_cn,
+            create_time,
+            modify_time
+        FROM
+            device_group_info info
+                LEFT JOIN device_group_map map ON info.device_group_id = map.device_group_id
+                LEFT JOIN sys_data_dict dict ON info.group_address = dict.dict_code and dict.dict_type = 'group_address'
+        GROUP BY
+            info.device_group_id
+        ORDER BY
+            create_time DESC
+    </select>
+
+    <delete id="deleteDeviceGroup">
+        delete from device_group_info where device_group_id = #{deviceGroupId}
+    </delete>
+
+    <select id="getDeviceGroupInfoAll" resultType="com.hitqz.sjtc.dto.deviceGroup.DeviceGroupInfoDetail">
+         SELECT
+            info.id,
+            device_group_id,
+            device_group_name,
+            device_group_desc,
+            group_address,
+            dict.dict_value as group_address_cn
+        FROM
+            device_group_info info
+            left join sys_data_dict dict on info.group_address = dict.dict_code and dict.dict_type = 'group_address'
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+{
+  "properties": [
+    {
+      "name": "xxl.job.executor.ip",
+      "type": "java.lang.String",
+      "description": "一般默认获取localhost或者自己去取当前ip."
+    },
+    {
+      "name": "groovyResource",
+      "type": "java.lang.String",
+      "description": "系统读取grooy文件的路径,生产和开发环境读取不同."
+    },
+    {
+      "name": "xxl.job.admin.addresses",
+      "type": "java.lang.String",
+      "description": "注册中心地址,即执行器会向这个地址注册其地址."
+    },
+    {
+      "name": "xxl.job.executor.port",
+      "type": "java.lang.String",
+      "description": "执行器开放给调度中心触发的端口,调度中心会根据这个端口进行任务触发."
+    },
+    {
+      "name": "xxl.job.executor.appname",
+      "type": "java.lang.String",
+      "description": "注册中心对应注册服务的名称，唯一标识."
+    },
+    {
+      "name": "xxl.job.executor.logpath",
+      "type": "java.lang.String",
+      "description": "XxlHelper日志输出的路径."
+    },
+    {
+      "name": "xxl.job.executor.logretentiondays",
+      "type": "java.lang.String",
+      "description": "日志保留周期,例如30,则30天清理一次."
+    },
+    {
+      "name": "xxl.job.accessToken",
+      "type": "java.lang.String",
+      "description": "不知道干嘛的,不配空会出错."
+    },
+    {
+      "name": "mybatis-plus.global-config.db-config.db-type",
+      "type": "java.lang.String",
+      "description": "配置当前使用的数据库类型,一般来说mybatis-plus会自动获取连接库的类型."
+    },
+    {
+      "name": "connector.region",
+      "type": "java.lang.String",
+      "description": "涂鸦智能数据中心存储类型,例如中国,美国,新加坡等等."
+    }
+  ] }

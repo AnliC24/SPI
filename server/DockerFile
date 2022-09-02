@@ -1,0 +1,6 @@
+FROM java:8
+MAINTAINER windc
+EXPOSE 8080
+ARG JAR_FILE
+ADD target/${JAR_FILE} /zhxf.jar
+ENTRYPOINT ["java","-jar","/zhxf.jar","application.yml"]

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.OriginWorkRecordInfoMapper">
+
+    <select id="getTenBatchNumberByOld" resultType="string">
+        SELECT
+            batch_operation_id
+        FROM
+            origin_work_record_info
+        WHERE
+              handle_status = '02'
+        GROUP BY
+            batch_operation_id
+        ORDER BY
+            create_time ASC
+            LIMIT 8
+    </select>
+
+    <select id="getWorkRecordByBatchNumber" resultType="com.hitqz.sjtc.entity.OriginWorkRecordInfo">
+        SELECT
+            id,
+            batch_operation_id,
+            device_id,
+            opt_process,
+            res_type,
+            res_value,
+            handle_status,
+            create_time,
+            modify_time
+        FROM
+            origin_work_record_info
+        WHERE
+            batch_operation_id IN
+        <foreach collection="batchNumbers" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <update id="updateOriginRecordByBatchNumber">
+        UPDATE
+            `origin_work_record_info`
+        SET
+            `handle_status` = #{handleStatus}
+        WHERE
+            `batch_operation_id` in
+        <foreach collection="batchNumbers" item="batchNumber" separator="," open="(" close=")">
+            #{batchNumber}
+        </foreach>
+    </update>
+
+    <update id="updateOriginRecordById">
+        UPDATE
+            `origin_work_record_info`
+        SET
+            `handle_status` = #{handleStatus}
+        WHERE
+            `id` in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteOriginRecordByUnDetect">
+        TRUNCATE origin_work_record_info
+    </delete>
+
+    <delete id="deleteOriginRecordByIds">
+        delete from origin_work_record_info where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

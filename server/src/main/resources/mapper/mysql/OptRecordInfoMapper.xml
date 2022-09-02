@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hitqz.sjtc.mapper.mysql.OptRecordInfoMapper">
+
+    <insert id="addOptRecord">
+        INSERT INTO `opt_record_info` (  `opt_ip`, `user_id`, `role_type`, `user_name`, `opt_harm_level`, `opt_url`, `is_success`,
+                                       `opt_result`, `create_time` )
+        VALUES
+            ( #{opt.optIp}, #{opt.userId}, #{opt.roleType}, #{opt.userName}, #{opt.optHarmLevel}, #{opt.optUrl}, #{opt.isSuccess},
+             #{opt.optResult}, #{opt.createTime} );
+    </insert>
+
+    <select id="selectOptRecordPage" resultType="com.hitqz.sjtc.dto.optRecord.OptRecordInfoDto"
+            parameterType="com.hitqz.sjtc.dto.optRecord.OptRecordPageCondition">
+        SELECT
+            info.id,
+            opt_ip,
+            user_id,
+            role_type,
+            dict.dict_value as role_type_cn,
+            user_name,
+            opt_harm_level,
+            opt_url,
+            is_success,
+            opt_result,
+            create_time
+        FROM
+            opt_record_info info
+                left join sys_data_dict dict
+                          on info.role_type = dict.dict_code and dict.dict_type = 'role_type'
+        order by create_time desc
+    </select>
+
+    <delete id="batchDeleteOptRecord">
+        delete from opt_record_info where id in
+        <foreach collection="ids"  open="(" close=")" item="id" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
